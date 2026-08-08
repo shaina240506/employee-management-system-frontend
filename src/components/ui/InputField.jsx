@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 function InputField({
   label,
-  type = "text",
+  type        = "text",
   name,
   value,
   onChange,
   placeholder,
-  readOnly = false,
+  readOnly    = false,
   autoComplete,
   max,
-  min
+  min,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -18,10 +19,9 @@ function InputField({
     type === "password" ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-
-      <div className="relative">
+    <div className="slds-field">
+      {label && <label className="slds-label">{label}</label>}
+      <div style={{ position: "relative" }}>
         <input
           type={inputType}
           name={name}
@@ -32,29 +32,22 @@ function InputField({
           autoComplete={autoComplete}
           max={max}
           min={min}
-          className="
-                        w-full
-                        rounded-xl
-                        border
-                        border-gray-300
-                        px-4
-                        py-3
-                        outline-none
-                        transition-all
-                        duration-300
-                        focus:border-purple-600
-                        focus:ring-2
-                        focus:ring-purple-300
-                    "
+          className="slds-input"
         />
-
         {type === "password" && (
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-600"
+            onClick={() => setShowPassword((v) => !v)}
+            style={{
+              position: "absolute", right: "10px", top: "50%",
+              transform: "translateY(-50%)", background: "none",
+              border: "none", cursor: "pointer", padding: "4px",
+              color: "var(--slds-text-weak)", display: "flex",
+              alignItems: "center",
+            }}
+            tabIndex={-1}
           >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
+            {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
           </button>
         )}
       </div>

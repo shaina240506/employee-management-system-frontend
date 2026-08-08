@@ -1,1 +1,388 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+/* ============================================================
+   EMS — Salesforce Lightning Design System (SLDS) Tokens
+   ============================================================ */
+
+:root {
+  /* Brand */
+  --slds-brand:          #0176D3;
+  --slds-brand-dark:     #014486;
+  --slds-brand-darker:   #032D60;
+  --slds-brand-light:    #D8EDFF;
+  --slds-brand-subtle:   #EEF5FC;
+
+  /* App Nav / Sidebar */
+  --slds-nav-bg:         #16325C;
+  --slds-nav-active-bg:  rgba(1, 118, 211, 0.22);
+  --slds-nav-hover-bg:   rgba(255, 255, 255, 0.07);
+  --slds-nav-text:       rgba(255, 255, 255, 0.72);
+  --slds-nav-text-active:#FFFFFF;
+  --slds-nav-border:     rgba(255, 255, 255, 0.10);
+
+  /* Text */
+  --slds-text-default:   #181818;
+  --slds-text-label:     #3E3E3C;
+  --slds-text-weak:      #706E6B;
+  --slds-text-inverse:   #FFFFFF;
+
+  /* Surface */
+  --slds-white:          #FFFFFF;
+  --slds-bg:             #F3F2F1;
+  --slds-bg-alt:         #FAFAF9;
+
+  /* Borders */
+  --slds-border:         #DDDBDA;
+  --slds-border-strong:  #B0ADAB;
+
+  /* Status */
+  --slds-success:        #2E844A;
+  --slds-success-bg:     #EEF4EE;
+  --slds-error:          #BA0517;
+  --slds-error-bg:       #FEE9E9;
+  --slds-warning:        #A87818;
+  --slds-warning-bg:     #FEF7E7;
+  --slds-info:           #0176D3;
+  --slds-info-bg:        #D8EDFF;
+  --slds-orange:         #DD5A0F;
+  --slds-orange-bg:      #FEF0E7;
+
+  /* Shadows */
+  --slds-shadow-sm:  0 1px 3px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);
+  --slds-shadow-md:  0 4px 12px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
+  --slds-shadow-lg:  0 8px 24px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.08);
+
+  /* Layout */
+  --sidebar-width:   240px;
+  --header-height:   56px;
+
+  /* Motion */
+  --t-fast:  0.12s ease;
+  --t-base:  0.20s ease;
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  color: var(--slds-text-default);
+  background: var(--slds-bg);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar           { width: 6px; height: 6px; }
+::-webkit-scrollbar-track     { background: transparent; }
+::-webkit-scrollbar-thumb     { background: var(--slds-border-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--slds-text-weak); }
+
+/* ============================================================
+   SLDS Buttons
+   ============================================================ */
+
+.slds-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 0 16px; height: 32px;
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  border-radius: 4px; border: 1px solid transparent;
+  cursor: pointer; transition: all var(--t-fast);
+  white-space: nowrap; line-height: 1; letter-spacing: .01em;
+  text-decoration: none;
+}
+.slds-btn:focus-visible { outline: 3px solid rgba(1,118,211,.35); outline-offset: 2px; }
+.slds-btn:disabled      { opacity: .45; cursor: not-allowed; pointer-events: none; }
+.slds-btn-lg            { height: 40px; padding: 0 24px; font-size: 14px; }
+.slds-btn-full          { width: 100%; }
+
+.slds-btn-brand         { background: var(--slds-brand);  color: #fff; border-color: var(--slds-brand); }
+.slds-btn-brand:hover   { background: var(--slds-brand-dark); border-color: var(--slds-brand-dark); }
+
+.slds-btn-neutral        { background: #fff; color: var(--slds-brand); border-color: var(--slds-brand); }
+.slds-btn-neutral:hover  { background: var(--slds-brand-subtle); }
+
+.slds-btn-outline        { background: #fff; color: var(--slds-text-label); border-color: var(--slds-border-strong); }
+.slds-btn-outline:hover  { background: var(--slds-bg); }
+
+.slds-btn-destructive          { background: #fff; color: var(--slds-error); border-color: var(--slds-error); }
+.slds-btn-destructive:hover    { background: var(--slds-error-bg); }
+
+.slds-btn-destructive-filled        { background: var(--slds-error); color: #fff; border-color: var(--slds-error); }
+.slds-btn-destructive-filled:hover  { background: #8E020F; border-color: #8E020F; }
+
+.slds-btn-success-filled       { background: var(--slds-success); color: #fff; border-color: var(--slds-success); }
+.slds-btn-success-filled:hover { background: #1D5C32; border-color: #1D5C32; }
+
+/* Icon-only button */
+.slds-btn-icon {
+  width: 30px; height: 30px; padding: 0;
+  background: transparent; border: 1px solid transparent;
+  border-radius: 4px; color: var(--slds-text-weak);
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: all var(--t-fast); font-size: 14px; font-family: inherit;
+}
+.slds-btn-icon:hover               { background: var(--slds-bg); color: var(--slds-text-default); border-color: var(--slds-border); }
+.slds-btn-icon-danger:hover        { background: var(--slds-error-bg); color: var(--slds-error); border-color: var(--slds-error); }
+.slds-btn-icon-primary:hover       { background: var(--slds-brand-light); color: var(--slds-brand); border-color: var(--slds-brand); }
+.slds-btn-icon-success:hover       { background: var(--slds-success-bg); color: var(--slds-success); border-color: var(--slds-success); }
+.slds-btn-icon-warning:hover       { background: var(--slds-orange-bg); color: var(--slds-orange); border-color: var(--slds-orange); }
+
+/* ============================================================
+   SLDS Form Elements
+   ============================================================ */
+
+.slds-field { display: flex; flex-direction: column; gap: 4px; }
+
+.slds-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--slds-text-weak); margin-bottom: 4px;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+
+.slds-input {
+  width: 100%; height: 36px; padding: 0 12px;
+  border: 1px solid var(--slds-border); border-radius: 4px;
+  font-size: 14px; font-family: inherit; color: var(--slds-text-default);
+  background: var(--slds-white); outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.slds-input:focus        { border-color: var(--slds-brand); box-shadow: 0 0 0 3px rgba(1,118,211,.15); }
+.slds-input:read-only    { background: var(--slds-bg-alt); color: var(--slds-text-weak); cursor: default; }
+.slds-input::placeholder { color: #B0ADAB; }
+
+.slds-select {
+  width: 100%; height: 36px; padding: 0 32px 0 12px;
+  border: 1px solid var(--slds-border); border-radius: 4px;
+  font-size: 14px; font-family: inherit; color: var(--slds-text-default);
+  background: var(--slds-white); outline: none; cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23706E6B' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.slds-select:focus { border-color: var(--slds-brand); box-shadow: 0 0 0 3px rgba(1,118,211,.15); }
+
+.slds-textarea {
+  width: 100%; padding: 8px 12px; min-height: 80px;
+  border: 1px solid var(--slds-border); border-radius: 4px;
+  font-size: 14px; font-family: inherit; color: var(--slds-text-default);
+  background: var(--slds-white); resize: vertical; outline: none; line-height: 1.5;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.slds-textarea:focus        { border-color: var(--slds-brand); box-shadow: 0 0 0 3px rgba(1,118,211,.15); }
+.slds-textarea::placeholder { color: #B0ADAB; }
+
+/* ============================================================
+   SLDS Data Table
+   ============================================================ */
+
+.slds-table-wrap  { border: 1px solid var(--slds-border); border-radius: 6px; overflow: hidden; }
+.slds-table       { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.slds-table thead th {
+  padding: 9px 14px; text-align: left;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--slds-text-weak);
+  background: var(--slds-bg-alt); border-bottom: 1px solid var(--slds-border);
+  white-space: nowrap;
+}
+.slds-table td {
+  padding: 10px 14px; border-bottom: 1px solid var(--slds-border);
+  color: var(--slds-text-default); vertical-align: middle;
+}
+.slds-table tbody tr:last-child td { border-bottom: none; }
+.slds-table tbody tr:hover          { background: var(--slds-brand-subtle); }
+.slds-table .text-center            { text-align: center; }
+
+/* ============================================================
+   SLDS Badges
+   ============================================================ */
+
+.slds-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.slds-badge-success { background: var(--slds-success-bg); color: var(--slds-success); }
+.slds-badge-error   { background: var(--slds-error-bg);   color: var(--slds-error);   }
+.slds-badge-warning { background: var(--slds-warning-bg); color: var(--slds-warning); }
+.slds-badge-info    { background: var(--slds-info-bg);    color: var(--slds-info);    }
+.slds-badge-orange  { background: var(--slds-orange-bg);  color: var(--slds-orange);  }
+.slds-badge-neutral { background: var(--slds-bg); color: var(--slds-text-weak); border: 1px solid var(--slds-border); }
+
+/* ============================================================
+   SLDS Cards
+   ============================================================ */
+
+.slds-card {
+  background: var(--slds-white); border: 1px solid var(--slds-border);
+  border-radius: 8px; box-shadow: var(--slds-shadow-sm);
+}
+.slds-card-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--slds-border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.slds-card-title  { font-size: 14px; font-weight: 700; margin: 0; }
+.slds-card-body   { padding: 20px; }
+
+/* ============================================================
+   SLDS Modal
+   ============================================================ */
+
+.slds-modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.46);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9000; backdrop-filter: blur(2px);
+  animation: slds-fadein .12s ease;
+}
+.slds-modal {
+  background: var(--slds-white); border-radius: 8px;
+  box-shadow: var(--slds-shadow-lg);
+  display: flex; flex-direction: column; max-height: 90vh;
+  animation: slds-slideup .15s ease;
+}
+.slds-modal-header {
+  padding: 15px 20px; border-bottom: 1px solid var(--slds-border);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.slds-modal-title  { font-size: 15px; font-weight: 700; margin: 0; }
+.slds-modal-body   { padding: 20px; overflow-y: auto; flex: 1; }
+.slds-modal-footer {
+  padding: 12px 20px; border-top: 1px solid var(--slds-border);
+  display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0;
+}
+
+@keyframes slds-fadein  { from { opacity: 0; }                        to { opacity: 1; } }
+@keyframes slds-slideup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ============================================================
+   SLDS Avatar
+   ============================================================ */
+
+.slds-avatar {
+  border-radius: 50%; background: var(--slds-brand); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; flex-shrink: 0; user-select: none;
+}
+.slds-avatar-xl { width: 64px; height: 64px; font-size: 26px; }
+.slds-avatar-lg { width: 48px; height: 48px; font-size: 20px; }
+.slds-avatar-md { width: 36px; height: 36px; font-size: 14px; }
+.slds-avatar-sm { width: 28px; height: 28px; font-size: 11px; }
+
+/* ============================================================
+   SLDS Record Detail
+   ============================================================ */
+
+.slds-record-field { display: flex; flex-direction: column; gap: 3px; padding: 10px 0; }
+.slds-record-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--slds-text-weak); }
+.slds-record-value { font-size: 14px; color: var(--slds-text-default); word-break: break-word; }
+
+/* ============================================================
+   SLDS Auth Layout
+   ============================================================ */
+
+.slds-auth-wrap        { min-height: 100vh; display: flex; }
+.slds-auth-brand {
+  width: 42%; background: linear-gradient(150deg, #032D60 0%, #0176D3 100%);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 64px; color: #fff;
+}
+.slds-auth-form-panel  { flex: 1; display: flex; align-items: center; justify-content: center; background: #fff; padding: 48px; }
+
+@media (max-width: 768px) {
+  .slds-auth-brand      { display: none; }
+  .slds-auth-form-panel { padding: 24px; }
+}
+
+/* ============================================================
+   SLDS Page Header (inner pages)
+   ============================================================ */
+
+.slds-page-header {
+  background: var(--slds-white); border: 1px solid var(--slds-border);
+  border-radius: 6px; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: var(--slds-shadow-sm); margin-bottom: 20px;
+}
+.slds-page-header-title    { font-size: 17px; font-weight: 700; margin: 0; }
+.slds-page-header-subtitle { font-size: 12px; color: var(--slds-text-weak); margin: 2px 0 0; }
+
+/* ============================================================
+   SLDS Section Title
+   ============================================================ */
+
+.slds-section-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--slds-text-weak);
+  padding-bottom: 8px; border-bottom: 1px solid var(--slds-border);
+  margin-bottom: 16px; margin-top: 8px;
+}
+
+/* ============================================================
+   SLDS Metric Tile (Dashboard)
+   ============================================================ */
+
+.slds-metric-tile {
+  background: var(--slds-white); border: 1px solid var(--slds-border);
+  border-radius: 8px; padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: var(--slds-shadow-sm);
+  transition: box-shadow var(--t-base), transform var(--t-base);
+  cursor: pointer; text-decoration: none;
+}
+.slds-metric-tile:hover { box-shadow: var(--slds-shadow-md); transform: translateY(-2px); }
+
+/* ============================================================
+   SLDS Sidebar
+   ============================================================ */
+
+.slds-sidebar {
+  width: var(--sidebar-width); min-height: 100vh;
+  background: var(--slds-nav-bg);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+
+/* ============================================================
+   SLDS Top Header
+   ============================================================ */
+
+.slds-header {
+  height: var(--header-height); background: var(--slds-white);
+  border-bottom: 1px solid var(--slds-border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; flex-shrink: 0;
+  position: sticky; top: 0; z-index: 100; box-shadow: var(--slds-shadow-sm);
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+
+.slds-spinner {
+  display: inline-block; border: 2px solid var(--slds-border);
+  border-top-color: var(--slds-brand); border-radius: 50%;
+  animation: slds-spin .65s linear infinite;
+}
+.slds-spinner-sm { width: 16px; height: 16px; }
+.slds-spinner-md { width: 24px; height: 24px; }
+@keyframes slds-spin { to { transform: rotate(360deg); } }
+
+.slds-divider { border: none; border-top: 1px solid var(--slds-border); margin: 0; }
+
+.slds-empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 24px;
+  color: var(--slds-text-weak); text-align: center;
+}
+
+/* Checkbox SLDS style */
+.slds-checkbox {
+  width: 16px; height: 16px; accent-color: var(--slds-brand); cursor: pointer;
+}

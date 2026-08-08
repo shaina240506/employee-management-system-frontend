@@ -1,41 +1,31 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getEmployeeAssets } from "../../services/AssetService";
+import Layout from "../../components/layout/Layout";
 import BackButton from "../../components/common/BackButton";
-
+import InputField from "../../components/ui/InputField";
+import SelectField from "../../components/ui/SelectField";
+import Button from "../../components/ui/Button";
 import { getEmployeeById } from "../../services/EmployeeService";
-
-import { assignAsset } from "../../services/AssetService";
+import { assignAsset, getEmployeeAssets } from "../../services/AssetService";
 
 function AssignAsset() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [employee, setEmployee] = useState({});
 
   const [formData, setFormData] = useState({
     employeeId: "",
-
     assetType: "",
-
     assetName: "",
-
     allocatedDate: "",
-
     status: "Assigned",
   });
 
-  useEffect(() => {
-    fetchEmployee();
-    fetchAssets();
-  }, []);
   const fetchAssets = async () => {
     try {
       const response = await getEmployeeAssets(id);
-
       setAssets(response.data);
     } catch (error) {
       console.log(error);
@@ -45,12 +35,9 @@ function AssignAsset() {
   const fetchEmployee = async () => {
     try {
       const response = await getEmployeeById(id);
-
       setEmployee(response.data);
-
       setFormData((prev) => ({
         ...prev,
-
         employeeId: response.data.id,
       }));
     } catch (error) {
@@ -58,15 +45,20 @@ function AssignAsset() {
     }
   };
 
+  useEffect(() => {
+    fetchEmployee();
+    fetchAssets();
+  }, []);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
-
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
     if (
       !formData.assetType ||
       !formData.assetName ||
@@ -74,29 +66,20 @@ function AssignAsset() {
       !formData.status
     ) {
       toast.error("All fields are required.");
-
       return;
     }
 
     setLoading(true);
-
     try {
       await assignAsset(formData);
-
       toast.success("Asset Assigned Successfully");
-
       setFormData({
         employeeId: employee.id,
-
         assetType: "",
-
         assetName: "",
-
         allocatedDate: "",
-
         status: "Assigned",
       });
-
       fetchAssets();
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to Assign Asset");
@@ -104,178 +87,128 @@ function AssignAsset() {
       setLoading(false);
     }
   };
+
   return (
-    <div className="min-h-screen bg-slate-100 flex justify-center items-center p-8">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl p-8">
-        {/* Top Bar */}
+    <Layout title="Assign Hardware Asset">
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <BackButton path="/admin/assets" />
 
-        <div className="flex justify-between items-center mb-8">
-          <BackButton />
-        </div>
-
-        {/* Heading */}
-
-        <h1 className="text-4xl font-bold text-center text-purple-700 mb-10">
-          Assign Asset
-        </h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Employee ID */}
-
-          <div>
-            <label className="block font-semibold mb-2">Employee ID</label>
-
-            <input
-              type="text"
-              value={employee.id || ""}
-              readOnly
-              className="w-full border rounded-xl px-4 py-3 bg-gray-100"
-            />
+        {/* Assign Form Card */}
+        <div className="slds-card">
+          <div className="slds-card-header">
+            <div>
+              <h1 className="slds-card-title">New Asset Allocation</h1>
+              <p style={{ fontSize: "12px", color: "var(--slds-text-weak)", margin: "2px 0 0" }}>
+                Assign hardware equipment to {employee.firstName} {employee.lastName} (ID: #{employee.id})
+              </p>
+            </div>
           </div>
+          <div className="slds-card-body">
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
+                <InputField
+                  label="Employee ID"
+                  value={employee.id || ""}
+                  readOnly
+                />
+                <InputField
+                  label="Employee Name"
+                  value={`${employee.firstName || ""} ${employee.lastName || ""}`}
+                  readOnly
+                />
+                <SelectField
+                  label="Asset Type"
+                  name="assetType"
+                  value={formData.assetType}
+                  onChange={handleChange}
+                  options={[
+                    "Laptop",
+                    "Desktop",
+                    "Monitor",
+                    "Mouse",
+                    "Keyboard",
+                    "Headphone",
+                    "Mobile",
+                    "Charger",
+                    "ID Card",
+                  ]}
+                />
+                <InputField
+                  label="Asset Name / Model"
+                  name="assetName"
+                  value={formData.assetName}
+                  onChange={handleChange}
+                  placeholder="e.g. MacBook Pro M2 16-inch"
+                />
+                <InputField
+                  label="Allocated Date"
+                  type="date"
+                  name="allocatedDate"
+                  value={formData.allocatedDate}
+                  onChange={handleChange}
+                />
+                <SelectField
+                  label="Allocation Status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  options={["Assigned", "Returned", "Lost", "Damaged"]}
+                />
+              </div>
 
-          {/* Employee Name */}
-
-          <div>
-            <label className="block font-semibold mb-2">Employee Name</label>
-
-            <input
-              type="text"
-              value={`${employee.firstName || ""} ${employee.lastName || ""}`}
-              readOnly
-              className="w-full border rounded-xl px-4 py-3 bg-gray-100"
-            />
-          </div>
-
-          {/* Asset Type */}
-
-          <div>
-            <label className="block font-semibold mb-2">Asset Type</label>
-
-            <select
-              name="assetType"
-              value={formData.assetType}
-              onChange={handleChange}
-              className="w-full border rounded-xl px-4 py-3"
-            >
-              <option value="">Select Asset Type</option>
-
-              <option value="Laptop">Laptop</option>
-
-              <option value="Desktop">Desktop</option>
-
-              <option value="Monitor">Monitor</option>
-
-              <option value="Mouse">Mouse</option>
-
-              <option value="Keyboard">Keyboard</option>
-
-              <option value="Headphone">Headphone</option>
-
-              <option value="Mobile">Mobile</option>
-
-              <option value="Charger">Charger</option>
-
-              <option value="ID Card">ID Card</option>
-            </select>
-          </div>
-
-          {/* Asset Name */}
-
-          <div>
-            <label className="block font-semibold mb-2">Asset Name</label>
-
-            <input
-              type="text"
-              name="assetName"
-              value={formData.assetName}
-              onChange={handleChange}
-              placeholder="Enter Asset Name"
-              className="w-full border rounded-xl px-4 py-3"
-            />
-          </div>
-
-          {/* Allocated Date */}
-
-          <div>
-            <label className="block font-semibold mb-2">Allocated Date</label>
-
-            <input
-              type="date"
-              name="allocatedDate"
-              value={formData.allocatedDate}
-              onChange={handleChange}
-              className="w-full border rounded-xl px-4 py-3"
-            />
-          </div>
-
-          {/* Status */}
-
-          <div>
-            <label className="block font-semibold mb-2">Status</label>
-
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="w-full border rounded-xl px-4 py-3"
-            >
-              <option value="Assigned">Assigned</option>
-
-              <option value="Returned">Returned</option>
-
-              <option value="Lost">Lost</option>
-
-              <option value="Damaged">Damaged</option>
-            </select>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ width: "200px" }}>
+                  <Button
+                    text={loading ? "Assigning..." : "Assign Equipment"}
+                    type="submit"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-        <div className="flex justify-center mt-10">
-  <button
-    onClick={handleSubmit}
-    disabled={loading}
-    className="bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-700 hover:to-fuchsia-700 text-white px-10 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50"
-  >
-    {loading ? "Assigning..." : "Assign Asset"}
-  </button>
-</div>
 
-<div className="mt-12">
-  <h2 className="text-3xl font-bold text-purple-700 mb-6 text-center">
-    Previously Assigned Assets
-  </h2>
-
-  {assets.length === 0 ? (
-    <div className="bg-gray-100 rounded-xl p-6 text-center text-gray-500">
-      No Assets Assigned Yet
-    </div>
-  ) : (
-    <div className="space-y-4">
-      {assets.map((asset) => (
-        <div
-          key={asset.id}
-          className="border rounded-xl p-5 flex justify-between items-center shadow-sm hover:shadow-md transition"
-        >
-          <div>
-            <h3 className="font-bold text-lg">{asset.assetName}</h3>
-
-            <p className="text-gray-600">{asset.assetType}</p>
-
-            <p className="text-sm text-gray-500">
-              Allocated:{" "}
-              {new Date(asset.allocatedDate).toLocaleDateString("en-IN")}
-            </p>
+        {/* Previous Assets Card */}
+        <div className="slds-card">
+          <div className="slds-card-header">
+            <h2 className="slds-card-title">Previously Allocated Equipment ({assets.length})</h2>
           </div>
-
-          <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
-            {asset.status}
-          </span>
+          <div className="slds-card-body" style={{ padding: 0 }}>
+            {assets.length === 0 ? (
+              <div className="slds-empty-state">
+                <p style={{ margin: 0 }}>No Assets Previously Assigned to this Employee</p>
+              </div>
+            ) : (
+              <div className="slds-table-wrap" style={{ border: "none" }}>
+                <table className="slds-table">
+                  <thead>
+                    <tr>
+                      <th>Asset Name</th>
+                      <th>Type</th>
+                      <th>Allocated Date</th>
+                      <th className="text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {assets.map((asset) => (
+                      <tr key={asset.id}>
+                        <td style={{ fontWeight: "700" }}>{asset.assetName}</td>
+                        <td style={{ color: "var(--slds-text-weak)" }}>{asset.assetType}</td>
+                        <td>{new Date(asset.allocatedDate).toLocaleDateString("en-IN")}</td>
+                        <td className="text-center">
+                          <span className="slds-badge slds-badge-success">{asset.status}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
-      ))}
-    </div>
-  )}
-</div>
-</div>
-    </div>
+      </div>
+    </Layout>
   );
 }
 

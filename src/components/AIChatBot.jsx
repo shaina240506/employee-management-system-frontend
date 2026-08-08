@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Bot, MessageCircle, SendHorizontal, Loader2, X } from "lucide-react";
-
 import ChatMessage from "./ChatMessage";
 import QuickAction from "./QuickAction";
 import { chatWithAI } from "../services/AIService";
@@ -10,57 +9,35 @@ function AIChatBot({ role }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const employee = JSON.parse(localStorage.getItem("employee"));
+  const employee = JSON.parse(localStorage.getItem("employee") || "{}");
   const storageKey =
-  role === "ADMIN"
-    ? "adminChatHistory"
-    : `employeeChatHistory_${employee?.id}`;
+    role === "ADMIN"
+      ? "adminChatHistory"
+      : `employeeChatHistory_${employee?.id}`;
+
   const welcomeMessage = {
     sender: "ai",
-    text: `👋 **Welcome ${employee?.firstName || ""}!**
-
-I'm your **AI HR Assistant**.
-
-I can help you with:
-
-- 👥 Employee Information
-- 💻 Asset Management
-- 🏢 Organization Summary
-- ✉️ Email Generation
-- 📈 Performance Reviews
-
-How can I help you today?`,
+    text:
+      role === "EMPLOYEE"
+        ? `👋 **Welcome ${employee?.firstName || ""}!**\n\nI'm your **AI HR Assistant**.\n\nI can help you with:\n\n- 👤 Profile Details\n- 💻 Assigned Assets\n- ✉️ Email Generation\n\nHow can I help you today?`
+        : `👋 **Welcome ${employee?.firstName || ""}!**\n\nI'm your **AI HR Assistant**.\n\nI can help you with:\n\n- 👥 Employee Information\n- 💻 Asset Management\n- 🏢 Organization Summary\n- ✉️ Email Generation\n- 📈 Performance Reviews\n\nHow can I help you today?`,
   };
 
   const [messages, setMessages] = useState(() => {
+    const savedMessages = localStorage.getItem(storageKey);
+    return savedMessages ? JSON.parse(savedMessages) : [welcomeMessage];
+  });
 
-  const savedMessages = localStorage.getItem(storageKey);
-
-  return savedMessages
-    ? JSON.parse(savedMessages)
-    : [welcomeMessage];
-
-});
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(messages));
+  }, [messages, storageKey]);
 
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify(messages)
-  );
-
-}, [messages, storageKey]);
-  useEffect(() => {
-    localStorage.setItem("chatHistory", JSON.stringify(messages));
-  }, [messages]);
   const clearChat = () => {
-
-  localStorage.removeItem(storageKey);
-
-  setMessages([welcomeMessage]);
-
-};
+    localStorage.removeItem(storageKey);
+    setMessages([welcomeMessage]);
+  };
 
   const quickActions =
     role === "EMPLOYEE"
@@ -68,7 +45,6 @@ How can I help you today?`,
           { title: "Show My Profile", icon: "👤" },
           { title: "Show My Assets", icon: "💻" },
           { title: "Generate Email", icon: "✉️" },
-          { title: "Performance Review", icon: "📈" },
         ]
       : [
           { title: "Employee Count", icon: "👥" },
@@ -87,23 +63,13 @@ How can I help you today?`,
     };
 
     setMessages((prev) => [...prev, userMessage]);
-
     setMessage("");
-
     setLoading(true);
 
     try {
-      const response = await chatWithAI(
-        text,
-
-        employee?.id,
-
-        role,
-      );
-
+      const response = await chatWithAI(text, employee?.id, role);
       setMessages((prev) => [
         ...prev,
-
         {
           sender: "ai",
           text: response,
@@ -112,7 +78,6 @@ How can I help you today?`,
     } catch {
       setMessages((prev) => [
         ...prev,
-
         {
           sender: "ai",
           text: "❌ Something went wrong. Please try again.",
@@ -126,91 +91,157 @@ How can I help you today?`,
   return (
     <>
       {/* Floating Button */}
-
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-700 to-fuchsia-600 text-white shadow-xl flex items-center justify-center hover:scale-110 transition-all duration-300 z-50"
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          width: "52px",
+          height: "52px",
+          borderRadius: "50%",
+          background: "var(--slds-brand)",
+          color: "#fff",
+          boxShadow: "var(--slds-shadow-lg)",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 9000,
+          transition: "transform var(--t-fast)",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
-        <MessageCircle size={26} />
+        <MessageCircle size={24} />
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-[420px] max-w-[95vw] h-[620px] rounded-3xl bg-white shadow-2xl border border-slate-200 flex flex-col overflow-hidden z-50">
+        <div
+          style={{
+            position: "fixed",
+            bottom: "86px",
+            right: "24px",
+            width: "380px",
+            maxWidth: "calc(100vw - 32px)",
+            height: "580px",
+            maxHeight: "calc(100vh - 120px)",
+            borderRadius: "8px",
+            background: "#fff",
+            boxShadow: "var(--slds-shadow-lg)",
+            border: "1px solid var(--slds-border)",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            zIndex: 9000,
+            animation: "slds-slideup .15s ease",
+          }}
+        >
           {/* Header */}
-
-          <div className="bg-gradient-to-r from-purple-700 via-fuchsia-600 to-indigo-600 px-6 py-5 min-h-[84px] flex-shrink-0">
-            <div className="flex items-center justify-between h-full">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center">
-                  <Bot className="text-white" size={22} />
-                </div>
-
-                <div>
-                  <h2 className="text-white text-lg font-bold">
-                    AI HR Assistant
-                  </h2>
-
-                  <p className="text-purple-100 text-sm">
-                    Employee Management Assistant
-                  </p>
-                </div>
+          <div
+            style={{
+              background: "var(--slds-brand-darker)",
+              padding: "12px 16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              color: "#fff",
+              flexShrink: 0,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "6px",
+                  background: "rgba(255, 255, 255, 0.15)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Bot size={18} color="#fff" />
               </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={clearChat}
-                  className="px-3 py-2 rounded-lg bg-white/20 text-white text-sm hover:bg-white/30 transition"
-                >
-                  Clear
-                </button>
-
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="w-10 h-10 rounded-full hover:bg-white/20 flex justify-center items-center transition"
-                >
-                  <X className="text-white" size={20} />
-                </button>
+              <div>
+                <h2 style={{ fontSize: "14px", fontWeight: "700", margin: 0, color: "#fff" }}>
+                  AI HR Assistant
+                </h2>
+                <p style={{ fontSize: "10px", opacity: 0.7, margin: 0 }}>
+                  Employee Management System
+                </p>
               </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <button
+                onClick={clearChat}
+                style={{
+                  background: "rgba(255, 255, 255, 0.15)",
+                  border: "none",
+                  borderRadius: "4px",
+                  color: "#fff",
+                  fontSize: "11px",
+                  padding: "4px 8px",
+                  cursor: "pointer",
+                }}
+              >
+                Clear
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="slds-btn-icon"
+                style={{ color: "#fff" }}
+              >
+                <X size={16} />
+              </button>
             </div>
           </div>
 
           {/* Chat Area */}
-
-          <div className="flex-1 flex flex-col bg-slate-100 overflow-hidden">
-            <div className="flex-[2] overflow-y-auto px-5 py-5">
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              background: "var(--slds-bg)",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
               {messages.map((msg, index) => (
                 <ChatMessage key={index} sender={msg.sender} text={msg.text} />
               ))}
 
               {loading && (
-                <div className="flex items-start gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex justify-center items-center shadow">
-                    <Bot size={18} />
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "10px 0" }}>
+                  <div className="slds-avatar slds-avatar-sm" style={{ background: "var(--slds-brand)" }}>
+                    <Bot size={14} />
                   </div>
-
-                  <div className="bg-white rounded-2xl rounded-bl-md border border-slate-200 px-5 py-4 shadow-sm">
-                    <div className="flex gap-2">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></span>
-
-                      <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:150ms]"></span>
-
-                      <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:300ms]"></span>
-                    </div>
+                  <div
+                    style={{
+                      background: "#fff",
+                      border: "1px solid var(--slds-border)",
+                      borderRadius: "6px",
+                      padding: "8px 12px",
+                      fontSize: "12px",
+                      color: "var(--slds-text-weak)",
+                    }}
+                  >
+                    AI is thinking...
                   </div>
                 </div>
               )}
-
-              <div ref={messagesEndRef}></div>
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Suggested Actions */}
-
-            <div className="bg-white border-t px-4 pt-2 pb-1 shrink-0">
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+            <div style={{ background: "#fff", borderTop: "1px solid var(--slds-border)", padding: "10px 12px" }}>
+              <div style={{ fontSize: "10px", fontWeight: "700", color: "var(--slds-text-weak)", textTransform: "uppercase", marginBottom: "6px" }}>
                 Suggested Actions
-              </p>
-
-              <div className="flex flex-wrap gap-1.5">
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                 {quickActions.map((item) => (
                   <QuickAction
                     key={item.title}
@@ -222,62 +253,27 @@ How can I help you today?`,
             </div>
           </div>
 
-          {/* Footer */}
-
-          <div className="bg-white border-t px-4 pt-3 pb-4">
-            <div className="flex gap-3">
+          {/* Input Footer */}
+          <div style={{ background: "#fff", borderTop: "1px solid var(--slds-border)", padding: "10px 12px" }}>
+            <div style={{ display: "flex", gap: "8px" }}>
               <input
                 type="text"
                 value={message}
                 placeholder="Ask AI anything..."
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    sendMessage();
-                  }
+                  if (e.key === "Enter") sendMessage();
                 }}
-                className="
-                                    flex-1
-                                    rounded-2xl
-                                    border
-                                    border-slate-300
-                                    px-5
-                                    py-3
-                                    outline-none
-                                    transition
-                                    focus:border-purple-500
-                                    focus:ring-2
-                                    focus:ring-purple-500/30
-                                    "
+                className="slds-input"
+                style={{ flex: 1 }}
               />
-
               <button
                 onClick={() => sendMessage()}
                 disabled={loading}
-                className="
-                                    w-14
-                                    h-14
-                                    rounded-2xl
-                                    bg-gradient-to-r
-                                    from-purple-700
-                                    via-fuchsia-600
-                                    to-indigo-600
-                                    text-white
-                                    flex
-                                    items-center
-                                    justify-center
-                                    shadow-lg
-                                    hover:scale-105
-                                    transition
-                                    disabled:opacity-50
-                                    disabled:hover:scale-100
-                                    "
+                className="slds-btn slds-btn-brand"
+                style={{ width: "36px", height: "36px", padding: 0, borderRadius: "4px" }}
               >
-                {loading ? (
-                  <Loader2 size={20} className="animate-spin" />
-                ) : (
-                  <SendHorizontal size={22} />
-                )}
+                {loading ? <Loader2 size={16} className="animate-spin" /> : <SendHorizontal size={16} />}
               </button>
             </div>
           </div>

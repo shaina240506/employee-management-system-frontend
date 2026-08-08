@@ -1,205 +1,123 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { updateEmployee } from "../../services/EmployeeService";
-
+import Layout from "../../components/layout/Layout";
 import BackButton from "../../components/common/BackButton";
 import InputField from "../../components/ui/InputField";
 import SelectField from "../../components/ui/SelectField";
 import TextAreaField from "../../components/ui/TextAreaField";
 import Button from "../../components/ui/Button";
+import { updateEmployee } from "../../services/EmployeeService";
 
 function UpdateProfile() {
+  const employee = JSON.parse(localStorage.getItem("employee") || "{}");
 
-    const employee = JSON.parse(localStorage.getItem("employee"));
+  const [formData, setFormData] = useState({
+    firstName: employee.firstName || "",
+    lastName: employee.lastName || "",
+    phoneNumber: employee.phoneNumber || "",
+    dateOfBirth: employee.dateOfBirth || "",
+    gender: employee.gender || "",
+    address: employee.address || "",
+  });
 
-    const [formData, setFormData] = useState({
-        firstName: employee.firstName,
-        lastName: employee.lastName,
-        phoneNumber: employee.phoneNumber,
-        dateOfBirth: employee.dateOfBirth,
-        gender: employee.gender,
-        address: employee.address,
-        // department: employee.department,
-        // designation: employee.designation,
-        // role: employee.role
-    });
+  const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-        const { name, value } = e.target;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await updateEmployee(employee.id, formData);
+      toast.success("Profile Updated Successfully");
+      localStorage.setItem("employee", JSON.stringify(response.data));
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Update Failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+  return (
+    <Layout title="Update Personal Profile">
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <BackButton />
 
-    };
+        <div className="slds-card">
+          <div className="slds-card-header">
+            <h1 className="slds-card-title">Edit Profile Details</h1>
+          </div>
+          <div className="slds-card-body">
+            <form onSubmit={handleSubmit}>
+              <div className="slds-section-title">Personal Details</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
+                <InputField
+                  label="First Name"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Last Name"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Date of Birth"
+                  type="date"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                />
+                <SelectField
+                  label="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  options={["Male", "Female", "Other"]}
+                />
+              </div>
 
-    const handleSubmit = async (e) => {
+              <div className="slds-section-title">Residential Address</div>
+              <div style={{ marginBottom: "24px" }}>
+                <TextAreaField
+                  label="Address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+              </div>
 
-        e.preventDefault();
-
-        try {
-
-            const response = await updateEmployee(
-                employee.id,
-                formData
-            );
-
-            toast.success("Profile Updated Successfully");
-
-            localStorage.setItem(
-                "employee",
-                JSON.stringify(response.data)
-            );
-
-        }
-
-        catch (error) {
-
-            toast.error(
-                error.response?.data?.message ||
-                "Update Failed"
-            );
-
-        }
-
-    };
-
-    return (
-
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center p-8">
-
-            <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8">
-
-                <div className="mb-8">
-
-                    <BackButton />
-
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ width: "200px" }}>
+                  <Button
+                    text={loading ? "Saving..." : "Save Profile"}
+                    type="submit"
+                    disabled={loading}
+                  />
                 </div>
-
-                <h1 className="text-3xl font-bold text-center text-purple-700 mb-10">
-
-                    Update Profile
-
-                </h1>
-
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-6"
-                >
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                        <InputField
-                            label="First Name"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                        />
-
-                        <InputField
-                            label="Last Name"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                        />
-
-                        <InputField
-                            label="Phone Number"
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                        />
-
-                        <InputField
-                            label="Date of Birth"
-                            type="date"
-                            name="dateOfBirth"
-                            value={formData.dateOfBirth}
-                            onChange={handleChange}
-                        />
-
-                        <SelectField
-                            label="Gender"
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            options={[
-                                "Male",
-                                "Female",
-                                "Other"
-                            ]}
-                        />
-
-                        {/* <SelectField
-                            label="Department"
-                            name="department"
-                            value={formData.department}
-                            onChange={handleChange}
-                            options={[
-                                "IT",
-                                "HR",
-                                "Finance",
-                                "Marketing",
-                                "Sales"
-                            ]}
-                        />
-
-                        <SelectField
-                            label="Designation"
-                            name="designation"
-                            value={formData.designation}
-                            onChange={handleChange}
-                            options={[
-                                "Software Engineer",
-                                "Senior Software Engineer",
-                                "HR Executive",
-                                "Manager",
-                                "Intern"
-                            ]}
-                        />
-
-                        <SelectField
-                            label="Role"
-                            name="role"
-                            value={formData.role}
-                            onChange={handleChange}
-                            options={[
-                                "ADMIN",
-                                "EMPLOYEE"
-                            ]}
-                        /> */}
-
-                    </div>
-
-                    <div className="mt-6">
-
-                        <TextAreaField
-                            label="Address"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                        />
-
-                    </div>
-                                        <div className="pt-2">
-
-                        <Button
-                            text="Update Profile"
-                            type="submit"
-                        />
-
-                    </div>
-
-                </form>
-
-            </div>
-
+              </div>
+            </form>
+          </div>
         </div>
-
-    );
-
+      </div>
+    </Layout>
+  );
 }
 
 export default UpdateProfile;
