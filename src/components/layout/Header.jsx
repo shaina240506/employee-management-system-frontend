@@ -6,9 +6,10 @@ import {
   FiLock,
   FiLogOut,
   FiX,
+  FiMenu,
 } from "react-icons/fi";
 
-function Header({ title }) {
+function Header({ title, onMenuToggle }) {
   const navigate = useNavigate();
   const [showMenu, setShowMenu]           = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -33,13 +34,22 @@ function Header({ title }) {
   return (
     <>
       <header className="slds-header">
+        {/* Hamburger — visible only on mobile via CSS */}
+        <button
+          className="slds-hamburger"
+          onClick={onMenuToggle}
+          aria-label="Toggle navigation"
+        >
+          <FiMenu size={20} />
+        </button>
+
         {/* Page Title */}
-        <h1 style={{ fontSize: "15px", fontWeight: "700", margin: 0, color: "var(--slds-text-default)" }}>
+        <h1 style={{ fontSize: "15px", fontWeight: "700", margin: 0, color: "var(--slds-text-default)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {title}
         </h1>
 
         {/* Right Controls */}
-        <div style={{ position: "relative" }} ref={menuRef}>
+        <div style={{ position: "relative", flexShrink: 0 }} ref={menuRef}>
           <button
             onClick={() => setShowMenu((v) => !v)}
             style={{
@@ -47,26 +57,29 @@ function Header({ title }) {
               background: "transparent", border: "1px solid var(--slds-border)",
               borderRadius: "4px", padding: "5px 10px", cursor: "pointer",
               transition: "background var(--t-fast)", fontFamily: "inherit",
+              maxWidth: "160px",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "var(--slds-bg)")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <div className="slds-avatar slds-avatar-sm" style={{ fontSize: "12px" }}>
+            <div className="slds-avatar slds-avatar-sm" style={{ fontSize: "12px", flexShrink: 0 }}>
               {employee?.firstName?.charAt(0)?.toUpperCase()}
             </div>
-            <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--slds-text-default)" }}>
+            <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--slds-text-default)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80px" }}>
               {employee?.firstName}
             </span>
-            <FiChevronDown size={13} color="var(--slds-text-weak)" />
+            <FiChevronDown size={13} color="var(--slds-text-weak)" style={{ flexShrink: 0 }} />
           </button>
 
           {/* Dropdown */}
           {showMenu && (
             <div style={{
-              position: "absolute", right: 0, top: "calc(100% + 6px)",
+              position: "fixed",
+              right: "12px",
+              top: "56px",
               background: "#fff", border: "1px solid var(--slds-border)",
               borderRadius: "6px", boxShadow: "var(--slds-shadow-md)",
-              width: "220px", overflow: "hidden", zIndex: 500,
+              width: "220px", maxWidth: "calc(100vw - 24px)", overflow: "hidden", zIndex: 500,
               animation: "slds-slideup .1s ease",
             }}>
               {/* User card */}
@@ -74,10 +87,10 @@ function Header({ title }) {
                 padding: "12px 16px", borderBottom: "1px solid var(--slds-border)",
                 background: "var(--slds-bg)",
               }}>
-                <div style={{ fontSize: "13px", fontWeight: "700" }}>
+                <div style={{ fontSize: "13px", fontWeight: "700", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {employee?.firstName} {employee?.lastName}
                 </div>
-                <div style={{ fontSize: "11px", color: "var(--slds-text-weak)", marginTop: "2px" }}>
+                <div style={{ fontSize: "11px", color: "var(--slds-text-weak)", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {employee?.email}
                 </div>
               </div>
@@ -87,13 +100,11 @@ function Header({ title }) {
                   icon: FiUser,
                   label: "Update Profile",
                   action: () => { setShowMenu(false); navigate("/employee/update-profile"); },
-                  danger: false,
                 },
                 {
                   icon: FiLock,
                   label: "Change Password",
                   action: () => { setShowMenu(false); navigate("/employee/change-password"); },
-                  danger: false,
                 },
               ].map(({ icon: Icon, label, action }) => (
                 <button
@@ -139,7 +150,7 @@ function Header({ title }) {
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "400px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 400px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title">Confirm Logout</h2>
               <button

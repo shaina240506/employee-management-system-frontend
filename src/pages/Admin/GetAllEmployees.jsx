@@ -164,7 +164,7 @@ function GetAllEmployees() {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "420px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 420px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title" style={{ color: "var(--slds-error)" }}>
                 Delete Employee Account

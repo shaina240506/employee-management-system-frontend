@@ -147,7 +147,7 @@ function EmployeeLogin() {
       {/* ── Forgot Password Modal ── */}
       {showForgotModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "480px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 480px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title">Reset Password</h2>
               <button className="slds-btn-icon" onClick={() => setShowForgotModal(false)}>

@@ -1,3 +1,15 @@
+/**
+ * Button — SLDS-style button with variant support.
+ * Props:
+ *   text      — button label
+ *   type      — 'button' | 'submit'
+ *   disabled  — boolean
+ *   variant   — 'brand' | 'neutral' | 'outline' | 'destructive' | 'destructive-filled' | 'success'
+ *   size      — 'default' | 'lg'
+ *   fullWidth — boolean
+ *   onClick   — handler
+ *   icon      — optional React node rendered left of text
+ */
 function Button({
   text,
   type       = "button",

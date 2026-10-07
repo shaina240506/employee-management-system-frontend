@@ -73,25 +73,22 @@ function Dashboard() {
       <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Banner Card */}
         <div
-          className="slds-card"
+          className="slds-card slds-dashboard-banner"
           style={{
             background: "linear-gradient(135deg, var(--slds-brand-dark) 0%, var(--slds-brand) 100%)",
             color: "#fff",
             border: "none",
             padding: "24px 32px",
-            display: "flex",
-            alignItems: "center",
-            gap: "20px",
           }}
         >
-          <div className="slds-avatar slds-avatar-xl" style={{ background: "rgba(255, 255, 255, 0.2)", color: "#fff" }}>
+          <div className="slds-avatar slds-avatar-xl" style={{ background: "rgba(255, 255, 255, 0.2)", color: "#fff", flexShrink: 0 }}>
             {employee.firstName ? employee.firstName.charAt(0).toUpperCase() : "E"}
           </div>
-          <div>
+          <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: "12px", opacity: 0.8, textTransform: "uppercase", letterSpacing: ".05em", fontWeight: "700" }}>
               Employee Profile
             </div>
-            <h1 style={{ fontSize: "24px", fontWeight: "800", margin: "4px 0" }}>
+            <h1 style={{ fontSize: "22px", fontWeight: "800", margin: "4px 0", wordBreak: "break-word" }}>
               Welcome, {employee.firstName} {employee.lastName} 👋
             </h1>
             <p style={{ fontSize: "13px", opacity: 0.9, margin: 0 }}>
@@ -112,7 +109,7 @@ function Dashboard() {
             </button>
           </div>
           <div className="slds-card-body">
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
               <div className="slds-record-field">
                 <span className="slds-record-label">Full Name</span>
                 <span className="slds-record-value" style={{ fontWeight: "600" }}>
@@ -164,7 +161,7 @@ function Dashboard() {
                 <span className="slds-spinner slds-spinner-md" />
               </div>
             ) : assets.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
                 {assets.map((asset) => (
                   <div
                     key={asset.id}
@@ -204,7 +201,7 @@ function Dashboard() {
                       </div>
                     </div>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "8px", borderTop: "1px solid var(--slds-border)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "8px", borderTop: "1px solid var(--slds-border)", flexWrap: "wrap", gap: "6px" }}>
                       <span style={{ fontSize: "12px", color: "var(--slds-text-weak)" }}>
                         Allocated: {new Date(asset.allocatedDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
                       </span>

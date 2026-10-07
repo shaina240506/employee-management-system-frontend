@@ -5,9 +5,10 @@ import {
   FiSearch,
   FiPackage,
   FiGrid,
+  FiX,
 } from "react-icons/fi";
 
-function Sidebar() {
+function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
   const employee = JSON.parse(localStorage.getItem("employee"));
@@ -26,36 +27,54 @@ function Sidebar() {
 
   const navItems = isAdmin ? adminNavItems : employeeNavItems;
 
+  const handleNav = (path) => {
+    navigate(path);
+    onClose(); // close sidebar on mobile after navigation
+  };
+
   return (
-    <div className="slds-sidebar">
-      {/* Logo */}
+    <div className={`slds-sidebar${isOpen ? " is-open" : ""}`}>
+      {/* Logo Row */}
       <div style={{
         padding: "18px 16px",
         borderBottom: "1px solid var(--slds-nav-border)",
         display: "flex",
         alignItems: "center",
         gap: "12px",
+        justifyContent: "space-between",
       }}>
-        <div style={{
-          width: "34px",
-          height: "34px",
-          background: "var(--slds-brand)",
-          borderRadius: "8px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}>
-          <FiGrid size={18} color="#fff" />
-        </div>
-        <div>
-          <div style={{ color: "#fff", fontWeight: "800", fontSize: "14px", letterSpacing: ".02em" }}>
-            EMS
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{
+            width: "34px",
+            height: "34px",
+            background: "var(--slds-brand)",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <FiGrid size={18} color="#fff" />
           </div>
-          <div style={{ color: "var(--slds-nav-text)", fontSize: "10px", letterSpacing: ".03em" }}>
-            Employee Manager
+          <div>
+            <div style={{ color: "#fff", fontWeight: "800", fontSize: "14px", letterSpacing: ".02em" }}>
+              EMS
+            </div>
+            <div style={{ color: "var(--slds-nav-text)", fontSize: "10px", letterSpacing: ".03em" }}>
+              Employee Manager
+            </div>
           </div>
         </div>
+
+        {/* Close button — visible only on mobile via CSS */}
+        <button
+          onClick={onClose}
+          className="slds-hamburger"
+          aria-label="Close navigation"
+          style={{ color: "rgba(255,255,255,0.7)" }}
+        >
+          <FiX size={18} />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -67,7 +86,7 @@ function Sidebar() {
           return (
             <button
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={() => handleNav(item.path)}
               style={{
                 width: "100%",
                 display: "flex",

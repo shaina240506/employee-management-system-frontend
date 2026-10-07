@@ -54,13 +54,14 @@ function ChatMessage({ sender, text }) {
                 <div
 
                     className={`
-
                     rounded-2xl
                     px-4
                     py-3
                     shadow-sm
                     border
                     leading-7
+                    break-words
+                    overflow-hidden
 
                     ${
                         isUser

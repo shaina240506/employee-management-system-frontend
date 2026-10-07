@@ -58,7 +58,7 @@ function UpdateProfile() {
           <div className="slds-card-body">
             <form onSubmit={handleSubmit}>
               <div className="slds-section-title">Personal Details</div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "20px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "20px" }}>
                 <InputField
                   label="First Name"
                   name="firstName"
@@ -104,7 +104,7 @@ function UpdateProfile() {
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <div style={{ width: "200px" }}>
+                <div style={{ width: "clamp(160px, 200px, 100%)" }}>
                   <Button
                     text={loading ? "Saving..." : "Save Profile"}
                     type="submit"
