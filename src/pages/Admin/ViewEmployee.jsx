@@ -33,7 +33,7 @@ function ViewEmployee() {
     <Layout title="Employee Record Details">
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         {/* Navigation & Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
           <BackButton path="/admin/employees" />
           {employee && (
             <button
@@ -63,12 +63,12 @@ function ViewEmployee() {
                 borderBottom: "1px solid var(--slds-border)",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <div className="slds-avatar slds-avatar-lg" style={{ background: "var(--slds-brand)" }}>
+              <div className="slds-record-banner-inner" style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+                <div className="slds-avatar slds-avatar-lg" style={{ background: "var(--slds-brand)", flexShrink: 0 }}>
                   {employee.firstName?.charAt(0)?.toUpperCase()}
                 </div>
-                <div>
-                  <h1 style={{ fontSize: "20px", fontWeight: "800", margin: "0 0 4px", color: "var(--slds-text-default)" }}>
+                <div style={{ minWidth: 0 }}>
+                  <h1 style={{ fontSize: "20px", fontWeight: "800", margin: "0 0 4px", color: "var(--slds-text-default)", wordBreak: "break-word" }}>
                     {employee.firstName} {employee.lastName}
                   </h1>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "12px", color: "var(--slds-text-weak)", flexWrap: "wrap" }}>

@@ -75,13 +75,14 @@ function Register() {
       {/* Top Nav Strip */}
       <div style={{
         background: "var(--slds-brand-darker)", height: "48px",
-        display: "flex", alignItems: "center", padding: "0 32px", gap: "12px",
+        display: "flex", alignItems: "center", padding: "0 16px", gap: "10px",
+        flexShrink: 0,
       }}>
         <FiGrid size={18} color="#fff" />
-        <span style={{ color: "#fff", fontWeight: "700", fontSize: "14px" }}>EMS — Employee Registration</span>
+        <span style={{ color: "#fff", fontWeight: "700", fontSize: "13px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>EMS — Employee Registration</span>
       </div>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "32px 24px" }}>
+      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "24px 16px" }}>
         <div style={{ width: "100%", maxWidth: "860px" }}>
           {/* Back */}
           <div style={{ marginBottom: "16px" }}>
@@ -106,7 +107,7 @@ function Register() {
               <form onSubmit={handleSubmit} autoComplete="off">
                 {/* Personal Info */}
                 <p className="slds-section-title">Personal Information</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
                   <InputField label="First Name" name="firstName" value={formData.firstName}
                     onChange={handleChange} placeholder="John" />
                   <InputField label="Last Name" name="lastName" value={formData.lastName}
@@ -123,7 +124,7 @@ function Register() {
 
                 {/* Job Info */}
                 <p className="slds-section-title">Job Details</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
                   <SelectField label="Department" name="department" value={formData.department}
                     onChange={handleChange} options={["IT", "HR", "Finance", "Marketing", "Sales"]} />
                   <SelectField label="Designation" name="designation" value={formData.designation}
@@ -137,7 +138,7 @@ function Register() {
 
                 {/* Password */}
                 <p className="slds-section-title">Account Security</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
                   <InputField label="Password" type="password" name="password" value={formData.password}
                     onChange={handleChange} placeholder="Min. 8 characters" autoComplete="off" />
                   <InputField label="Confirm Password" type="password" name="confirmPassword"
@@ -149,7 +150,7 @@ function Register() {
                 <p style={{ fontSize: "12px", color: "var(--slds-text-weak)", marginBottom: "16px" }}>
                   These answers will be used to recover your account if you forget your password.
                 </p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "16px" }}>
                   <InputField label="Favourite Color" name="favouriteColorAnswer" value={formData.favouriteColorAnswer}
                     onChange={handleChange} placeholder="e.g. Blue" />
                   <InputField label="Birth Place" name="birthplaceAnswer" value={formData.birthplaceAnswer}
@@ -159,7 +160,7 @@ function Register() {
                 </div>
 
                 {/* Submit */}
-                <div style={{ marginTop: "28px", display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                <div style={{ marginTop: "28px", display: "flex", justifyContent: "flex-end", gap: "10px", flexWrap: "wrap" }}>
                   <button type="button" className="slds-btn slds-btn-outline"
                     onClick={() => navigate(-1)}>
                     Cancel

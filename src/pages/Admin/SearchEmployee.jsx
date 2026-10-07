@@ -153,7 +153,7 @@ function SearchEmployee() {
               </div>
 
               <div style={{ marginTop: "24px", display: "flex", justifyContent: "flex-end" }}>
-                <div style={{ width: "200px" }}>
+                <div style={{ width: "clamp(160px, 200px, 100%)" }}>
                   <Button
                     text={loading ? "Searching..." : "Search Directory"}
                     type="submit"

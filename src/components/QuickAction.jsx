@@ -13,9 +13,10 @@ bg-purple-50
 border
 border-purple-200
 text-[11px]
-font-medium4
+font-medium
 text-purple-700
-whitespace-nowrap
+max-w-full
+truncate
 hover:bg-purple-100
 hover:border-purple-300
 transition-all

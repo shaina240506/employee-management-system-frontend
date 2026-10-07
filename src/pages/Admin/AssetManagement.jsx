@@ -123,27 +123,25 @@ function AssetManagement() {
               Overview of assets assigned to employees across departments
             </p>
           </div>
-          <div style={{ width: "280px" }}>
-            <div style={{ position: "relative" }}>
-              <input
-                type="text"
-                placeholder="Search by name, department..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="slds-input"
-                style={{ paddingLeft: "32px" }}
-              />
-              <FiSearch
-                size={14}
-                style={{
-                  position: "absolute",
-                  left: "10px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "var(--slds-text-weak)",
-                }}
-              />
-            </div>
+          <div style={{ position: "relative", display: "flex", alignItems: "center", width: "100%", maxWidth: "320px" }}>
+            <FiSearch
+              size={14}
+              style={{
+                position: "absolute",
+                left: "10px",
+                color: "var(--slds-text-weak)",
+                pointerEvents: "none",
+                zIndex: 1,
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Search by name, department..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="slds-input"
+              style={{ paddingLeft: "32px", width: "100%", height: "36px" }}
+            />
           </div>
         </div>
 
@@ -257,7 +255,7 @@ function AssetManagement() {
       {/* View Modal */}
       {showViewModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "560px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 560px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title">
                 Assets Assigned to {selectedEmployee?.employeeName}
@@ -317,7 +315,7 @@ function AssetManagement() {
       {/* Update Modal */}
       {showUpdateModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "560px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 560px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title">
                 Update Asset Details for {selectedEmployee?.employeeName}
@@ -375,7 +373,7 @@ function AssetManagement() {
       {/* Delete Modal */}
       {showDeleteModal && (
         <div className="slds-modal-backdrop">
-          <div className="slds-modal" style={{ width: "480px" }}>
+          <div className="slds-modal" style={{ width: "min(92vw, 480px)" }}>
             <div className="slds-modal-header">
               <h2 className="slds-modal-title" style={{ color: "var(--slds-error)" }}>
                 Delete Assets for {selectedEmployee?.employeeName}

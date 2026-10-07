@@ -157,7 +157,7 @@ function AssignAsset() {
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <div style={{ width: "200px" }}>
+                <div style={{ width: "clamp(160px, 200px, 100%)" }}>
                   <Button
                     text={loading ? "Assigning..." : "Assign Equipment"}
                     type="submit"

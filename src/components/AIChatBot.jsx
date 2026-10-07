@@ -93,6 +93,7 @@ function AIChatBot({ role }) {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(true)}
+        className="slds-ai-float-btn"
         style={{
           position: "fixed",
           bottom: "24px",
@@ -119,6 +120,7 @@ function AIChatBot({ role }) {
 
       {isOpen && (
         <div
+          className="slds-ai-chat-window"
           style={{
             position: "fixed",
             bottom: "86px",

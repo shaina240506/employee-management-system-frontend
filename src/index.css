@@ -386,3 +386,216 @@ body {
 .slds-checkbox {
   width: 16px; height: 16px; accent-color: var(--slds-brand); cursor: pointer;
 }
+
+/* ============================================================
+   RESPONSIVE — Sidebar Mobile Drawer
+   ============================================================ */
+
+/* Hamburger / Menu toggle button — hidden on desktop */
+.slds-hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+  color: var(--slds-text-weak);
+  align-items: center;
+  justify-content: center;
+  transition: all var(--t-fast);
+  flex-shrink: 0;
+}
+.slds-hamburger:hover { background: var(--slds-bg); color: var(--slds-text-default); border-color: var(--slds-border); }
+
+/* Mobile sidebar backdrop overlay */
+.slds-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1199;
+  backdrop-filter: blur(2px);
+  animation: slds-fadein .2s ease;
+}
+
+/* ============================================================
+   RESPONSIVE — Table
+   ============================================================ */
+
+/* Allow tables to scroll horizontally on narrow screens */
+.slds-table-wrap {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   RESPONSIVE — Page Header
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .slds-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Modals
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .slds-modal {
+    width: 95vw !important;
+    max-height: 92vh;
+    margin: 0 8px;
+  }
+  .slds-modal-body  { padding: 16px; }
+  .slds-modal-header { padding: 12px 16px; }
+  .slds-modal-footer {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .slds-modal-footer .slds-btn { flex: 1; min-width: 80px; }
+}
+
+/* ============================================================
+   RESPONSIVE — Card Header
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .slds-card-header { flex-wrap: wrap; gap: 10px; }
+}
+
+/* ============================================================
+   RESPONSIVE — Dashboard Banner
+   ============================================================ */
+
+.slds-dashboard-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+@media (max-width: 540px) {
+  .slds-dashboard-banner { flex-direction: column; align-items: flex-start; }
+  .slds-dashboard-banner .slds-avatar-xl { display: none; }
+}
+
+/* ============================================================
+   RESPONSIVE — Sidebar & Header (tablet / mobile)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .slds-hamburger { display: inline-flex; }
+
+  /* Show backdrop when sidebar is open */
+  .slds-sidebar-backdrop.is-open { display: block; }
+
+  /* Sidebar becomes a fixed drawer */
+  .slds-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1200;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--slds-shadow-lg);
+  }
+  .slds-sidebar.is-open { transform: translateX(0); }
+
+  /* Header adjustments */
+  .slds-header { padding: 0 12px; gap: 8px; }
+  .slds-header h1 {
+    font-size: 13px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+  }
+  /* Main content area padding */
+  .slds-main-padding { padding: 16px !important; }
+}
+
+@media (max-width: 480px) {
+  .slds-header { padding: 0 10px; }
+  .slds-header h1 { font-size: 12px !important; }
+  .slds-main-padding { padding: 12px !important; }
+}
+
+/* ============================================================
+   RESPONSIVE — Auth pages
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .slds-auth-form-panel { padding: 20px 16px !important; }
+}
+
+/* ============================================================
+   RESPONSIVE — Register / Form grids
+   ============================================================ */
+
+.slds-form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.slds-form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+/* ============================================================
+   RESPONSIVE — AI Chatbot floating elements
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .slds-ai-float-btn {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+  .slds-ai-chat-window {
+    bottom: 72px !important;
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Metric tiles
+   ============================================================ */
+
+@media (max-width: 400px) {
+  .slds-metric-tile {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Record detail header (ViewEmployee)
+   ============================================================ */
+
+@media (max-width: 540px) {
+  .slds-record-banner-inner {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .slds-asset-metric-tile {
+    padding: 16px 18px !important;
+    gap: 12px !important;
+  }
+}
